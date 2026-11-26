@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex, nofollow">
+<title>الفعاليات والتقويم | هندسة كيميائية — الدفعة 45</title>
+<meta name="description" content="تقويم فعاليات الدفعة 45: ندوات، زيارات ميدانية، ورشات، ومواعيد مهمة.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Amiri:wght@400;700&family=Cairo:wght@300;400;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="assets/css/style.css">
+<link rel="icon" href="assets/img/favicon.svg" type="image/svg+xml">
+</head>
+<body data-page="events">
+<div id="site-topbar"></div>
+<div id="site-header"></div>
+
+<main>
+  <section class="page-hero">
+    <div class="container page-hero-inner">
+      <div class="breadcrumb"><a href="index.html">الرئيسية</a><span class="sep">/</span><span>الفعاليات</span></div>
+      <h1 class="page-title">الفعاليات والتقويم</h1>
+      <p class="page-sub">ندوات، زيارات ميدانية، ورشات، ومواعيد نهائية — كل ما يحدث في الدفعة على تقويم واحد.</p>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="container">
+      <div class="grid" style="grid-template-columns:minmax(0,1.15fr) minmax(0,.85fr);align-items:start;gap:1.6rem" id="events-layout">
+        <div>
+          <div class="calendar reveal" id="calendar">
+            <div class="loading">جارٍ تحميل التقويم…</div>
+          </div>
+        </div>
+        <div>
+          <div class="section-head" style="margin-bottom:1.2rem">
+            <span class="eyebrow">القادم</span>
+            <h2 class="section-title" style="font-size:1.3rem">أقرب الفعاليات</h2>
+          </div>
+          <div class="event-list" id="upcoming-events">
+            <div class="loading">جارٍ التحميل…</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="mt-4">
+        <div class="section-head">
+          <span class="eyebrow">الأرشيف</span>
+          <h2 class="section-title" style="font-size:1.3rem">فعاليات سابقة</h2>
+        </div>
+        <div class="event-list" id="past-events"></div>
+      </div>
+    </div>
+  </section>
+</main>
+
+<div id="site-footer"></div>
+<script src="assets/js/app.js"></script>
+<script>
+B45.ready(async function () {
+  let events = [];
+  try { events = await B45.loadJSON('data/events.json'); }
+  catch (err) {
+    document.getElementById('calendar').innerHTML = '<div class="empty">تعذّر التحميل: ' + B45.esc(err.message) + '</div>';
+    return;
+  }
+  events = B45.sortByDateDesc(events).reverse();
+  const today = new Date(); today.setHours(0, 0, 0, 0);
+  const byDate = {};
+  events.forEach(function (e) { (byDate[e.date] = byDate[e.date] || []).push(e); });
+
+  const upcoming = events.filter(function (e) { return new Date(e.date) >= today; });
+  const next = upcoming[0];
+  let view = next ? new Date(next.date) : new Date();
+  view = new Date(view.getFullYear(), view.getMonth(), 1);
+
+  const DOW = ['السبت', 'الأحد', 'الاثنين', 'الثلاثاء', 'الأربعاء', 'الخميس', 'الجمعة'];
+  const cal = document.getElementById('calendar');
+
+  function iso(d) {
+    return d.getFullYear() + '-' + String(d.getMonth() + 1).padStart(2, '0') + '-' + String(d.getDate()).padStart(2, '0');
+  }
+
+  function renderCal() {
+    const y = view.getFullYear(), m = view.getMonth();
+    const first = new Date(y, m, 1);
+    const daysInMonth = new Date(y, m + 1, 0).getDate();
+    // Saturday-first column index
+    const lead = (first.getDay() + 1) % 7;
+    let html = '<div class="cal-head">' +
+      '<button class="chip" id="cal-prev" aria-label="الشهر السابق">‹</button>' +
+      '<h3>' + B45.MONTHS[m] + ' ' + y + '</h3>' +
+      '<button class="chip" id="cal-next" aria-label="الشهر التالي">›</button></div>' +
+      '<div class="cal-grid">';
+    DOW.forEach(function (d) { html += '<div class="cal-dow">' + d + '</div>'; });
+    for (let i = 0; i < lead; i++) html += '<div class="cal-cell muted"></div>';
+    for (let d = 1; d <= daysInMonth; d++) {
+      const dateStr = iso(new Date(y, m, d));
+      const evs = byDate[dateStr] || [];
+      const isToday = dateStr === iso(today);
+      html += '<div class="cal-cell' + (isToday ? ' today' : '') + '"><span class="num">' + d + '</span>';
+      evs.slice(0, 2).forEach(function (e) {
+        html += '<span class="cal-event" title="' + B45.esc(e.title) + '">' + B45.esc(e.title) + '</span>';
+      });
+      if (evs.length > 2) html += '<span class="cal-dot"></span>';
+      html += '</div>';
+    }
+    const tail = (7 - ((lead + daysInMonth) % 7)) % 7;
+    for (let i = 0; i < tail; i++) html += '<div class="cal-cell muted"></div>';
+    html += '</div><p class="table-note" style="margin-top:1rem">الأيام المظللة بالذهبي = اليوم الحالي. الفعاليات تظهر مختصرة داخل الخلايا.</p>';
+    cal.innerHTML = html;
+    document.getElementById('cal-prev').addEventListener('click', function () { view = new Date(y, m - 1, 1); renderCal(); });
+    document.getElementById('cal-next').addEventListener('click', function () { view = new Date(y, m + 1, 1); renderCal(); });
+  }
+
+  renderCal();
+
+  document.getElementById('upcoming-events').innerHTML =
+    upcoming.length ? upcoming.map(B45.eventCard).join('') : '<div class="empty">لا توجد فعاليات قادمة مسجّلة.</div>';
+
+  const past = events.filter(function (e) { return new Date(e.date) < today; });
+  document.getElementById('past-events').innerHTML =
+    past.length ? past.slice(0, 3).map(B45.eventCard).join('') : '<div class="empty">لا توجد فعاليات سابقة.</div>';
+  document.querySelectorAll('.reveal').forEach(function (el) { el.classList.add('visible'); });
+
+  // responsive: stack columns on mobile
+  if (window.innerWidth < 900) document.getElementById('events-layout').style.gridTemplateColumns = '1fr';
+});
+</script>
+<style>
+@media(max-width:900px){#events-layout{grid-template-columns:1fr!important}}
+</style>
+</body>
+</html>
