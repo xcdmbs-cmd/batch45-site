@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex, nofollow">
+<title>منتدى الدفعة | هندسة كيميائية — الدفعة 45</title>
+<meta name="description" content="منتدى الدفعة 45: أسئلة، تلخيصات، مجموعات مذاكرة، واقتراحات.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Amiri:wght@400;700&family=Cairo:wght@300;400;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="assets/css/style.css">
+<link rel="icon" href="assets/img/favicon.svg" type="image/svg+xml">
+</head>
+<body data-page="forum">
+<div id="site-topbar"></div>
+<div id="site-header"></div>
+
+<main>
+  <section class="page-hero">
+    <div class="container page-hero-inner">
+      <div class="breadcrumb"><a href="index.html">الرئيسية</a><span class="sep">/</span><span>المنتدى</span></div>
+      <h1 class="page-title">منتدى الدفعة</h1>
+      <p class="page-sub">اسأل زملاءك، شارك ملخصاتك، ونسّق مجموعات المذاكرة — مساحة نقاش أكاديمية محترمة.</p>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="container">
+      <div class="notice reveal" style="margin-bottom:1.8rem">
+        <span>💡</span>
+        <div>
+          <b>المنتدى تجريبي في هذه النسخة</b>
+          المواضيع الجديدة والردود تُحفظ في متصفحك فقط (localStorage) ولا يراها الآخرون حتى نضيف خادمًا. للنشر المشترك لاحقًا: قاعدة بيانات مجانية مثل Supabase.
+        </div>
+      </div>
+
+      <div class="toolbar">
+        <div class="chips" id="forum-filters">
+          <button class="chip active" data-cat="all">الكل</button>
+          <button class="chip" data-cat="أكاديمي">أكاديمي</button>
+          <button class="chip" data-cat="مواد">مواد</button>
+          <button class="chip" data-cat="تنظيم">تنظيم</button>
+          <button class="chip" data-cat="اقتراح">اقتراحات</button>
+        </div>
+        <div style="display:flex;gap:.6rem;flex-wrap:wrap;flex:1;justify-content:flex-end">
+          <div class="search-box">
+            <span class="ico">🔍</span>
+            <input class="search-input" id="forum-search" type="text" placeholder="ابحث في الموضوعات…" aria-label="بحث">
+          </div>
+          <button class="btn btn-gold btn-sm" id="new-topic">＋ موضوع جديد</button>
+        </div>
+      </div>
+
+      <div class="news-list" id="topic-list">
+        <div class="loading">جارٍ تحميل المنتدى…</div>
+      </div>
+    </div>
+  </section>
+</main>
+
+<div id="site-footer"></div>
+<script src="assets/js/app.js"></script>
+<script>
+B45.ready(async function () {
+  let seed = [];
+  try { seed = await B45.loadJSON('data/forum.json'); }
+  catch (err) {
+    document.getElementById('topic-list').innerHTML = '<div class="empty">تعذّر التحميل: ' + B45.esc(err.message) + '</div>';
+    return;
+  }
+
+  const LS_POSTS = 'b45_forum_posts';
+  const LS_REPLIES = 'b45_forum_replies';
+  function localPosts() { try { return JSON.parse(localStorage.getItem(LS_POSTS) || '[]'); } catch (e) { return []; } }
+  function localReplies() { try { return JSON.parse(localStorage.getItem(LS_REPLIES) || '{}'); } catch (e) { return {}; } }
+  function savePosts(p) { localStorage.setItem(LS_POSTS, JSON.stringify(p)); }
+  function saveReplies(r) { localStorage.setItem(LS_REPLIES, JSON.stringify(r)); }
+
+  function initials(name) {
+    const parts = String(name || '؟').trim().split(/\s+/);
+    return (parts[0] ? parts[0][0] : '؟') + (parts[1] ? parts[1][0] : '');
+  }
+  function allTopics() {
+    return localPosts().concat(seed).sort(function (a, b) { return new Date(b.date) - new Date(a.date); });
+  }
+  function repliesFor(t) {
+    const local = localReplies()[t.id] || [];
+    return (t.replies || []).concat(local);
+  }
+
+  let cat = 'all', term = '';
+
+  function cardHtml(t) {
+    const reps = repliesFor(t);
+    return '<article class="card topic-card reveal" data-topic-id="' + B45.esc(t.id) + '">' +
+      '<div class="topic-top"><div class="avatar">' + B45.esc(initials(t.author)) + '</div>' +
+      '<div><h3 class="topic-title">' + B45.esc(t.title) + '</h3>' +
+      '<div class="topic-meta"><span>👤 ' + B45.esc(t.author) + '</span><span>🗓️ ' + B45.fmtDate(t.date) + '</span>' +
+      '<span class="badge ' + B45.badgeClass(t.category) + '">' + B45.esc(t.category) + '</span>' +
+      '<span>💬 ' + reps.length + ' رد</span></div></div></div>' +
+      '<p class="topic-excerpt">' + B45.esc(String(t.body).slice(0, 160)) + (String(t.body).length > 160 ? '…' : '') + '</p>' +
+      '<span class="card-link">افتح النقاش ←</span></article>';
+  }
+
+  function render() {
+    const list = allTopics().filter(function (t) {
+      const okCat = cat === 'all' || t.category === cat;
+      const hay = (t.title + ' ' + t.author + ' ' + t.body).toLowerCase();
+      return okCat && (!term || hay.indexOf(term.toLowerCase()) !== -1);
+    });
+    const box = document.getElementById('topic-list');
+    box.innerHTML = list.length ? list.map(cardHtml).join('')
+      : '<div class="empty" style="padding:2.5rem;text-align:center;background:#fff;border-radius:14px;border:1px dashed var(--line)">لا توجد موضوعات مطابقة.</div>';
+    box.querySelectorAll('[data-topic-id]').forEach(function (card) {
+      card.addEventListener('click', function () { openTopic(card.getAttribute('data-topic-id')); });
+    });
+  }
+
+  function openTopic(id) {
+    const t = allTopics().find(function (x) { return x.id === id; });
+    if (!t) return;
+    const reps = repliesFor(t);
+    const repliesHtml = reps.length
+      ? reps.map(function (r) {
+          return '<div class="reply"><div class="avatar">' + B45.esc(initials(r.author)) + '</div>' +
+            '<div class="body"><div class="who"><b>' + B45.esc(r.author) + '</b><span>· ' + B45.fmtDate(r.date) + '</span></div>' +
+            '<p>' + B45.esc(r.body) + '</p></div></div>';
+        }).join('')
+      : '<p class="text-muted" style="font-size:.85rem">لا توجد ردود بعد — كن أول من يجيب.</p>';
+    B45.openModal({
+      title: t.title,
+      meta: '<span class="badge ' + B45.badgeClass(t.category) + '">' + B45.esc(t.category) + '</span> · ' + B45.esc(t.author) + ' · ' + B45.fmtDate(t.date),
+      html: '<p>' + B45.esc(t.body) + '</p>' +
+        '<hr style="border:0;border-top:1px solid var(--line-2);margin:1.2rem 0">' +
+        '<h4 style="margin-top:0">الردود (' + reps.length + ')</h4>' + repliesHtml +
+        '<div class="reply-form"><input type="text" id="rep-name" placeholder="اسمك" maxlength="60">' +
+        '<textarea id="rep-body" placeholder="اكتب ردّك…" maxlength="1200"></textarea>' +
+        '<button class="btn btn-gold btn-sm" id="rep-send" style="justify-self:start">إرسال الرد</button>' +
+        '<div class="text-muted" style="font-size:.72rem">يُحفظ الرد محليًا في متصفحك (نسخة تجريبية).</div></div>'
+    });
+    document.getElementById('rep-send').addEventListener('click', function () {
+      const name = (document.getElementById('rep-name').value || 'زائر').trim();
+      const body = (document.getElementById('rep-body').value || '').trim();
+      if (!body) return;
+      const all = localReplies();
+      (all[t.id] = all[t.id] || []).push({ author: name, date: new Date().toISOString().slice(0, 10), body: body });
+      saveReplies(all);
+      B45.closeModal();
+      render();
+      setTimeout(function () { openTopic(t.id); }, 120);
+    });
+  }
+
+  document.getElementById('forum-filters').addEventListener('click', function (e) {
+    const b = e.target.closest('.chip'); if (!b) return;
+    this.querySelectorAll('.chip').forEach(function (c) { c.classList.remove('active'); });
+    b.classList.add('active'); cat = b.getAttribute('data-cat'); render();
+  });
+  document.getElementById('forum-search').addEventListener('input', function (e) { term = e.target.value.trim(); render(); });
+
+  document.getElementById('new-topic').addEventListener('click', function () {
+    B45.openModal({
+      title: 'موضوع جديد',
+      meta: 'شارك سؤالًا أو اقتراحًا مع زملائك',
+      html: '<div class="reply-form" style="display:grid;gap:.55rem">' +
+        '<input type="text" id="nt-name" placeholder="اسمك" maxlength="60">' +
+        '<input type="text" id="nt-title" placeholder="عنوان الموضوع" maxlength="120">' +
+        '<select id="nt-cat"><option>أكاديمي</option><option>مواد</option><option>تنظيم</option><option>اقتراح</option></select>' +
+        '<textarea id="nt-body" placeholder="اكتب موضوعك…" maxlength="2000"></textarea>' +
+        '<button class="btn btn-gold btn-sm" id="nt-send" style="justify-self:start">نشر الموضوع</button>' +
+        '<div class="text-muted" style="font-size:.72rem">يُحفظ الموضوع محليًا في متصفحك (نسخة تجريبية).</div></div>'
+    });
+    document.getElementById('nt-send').addEventListener('click', function () {
+      const name = (document.getElementById('nt-name').value || 'زائر').trim();
+      const title = (document.getElementById('nt-title').value || '').trim();
+      const body = (document.getElementById('nt-body').value || '').trim();
+      const category = document.getElementById('nt-cat').value;
+      if (!title || !body) { alert('أدخل عنوان الموضوع ونصه.'); return; }
+      const posts = localPosts();
+      posts.push({ id: 'local-' + Date.now(), author: name, title: title, body: body, category: category, date: new Date().toISOString().slice(0, 10), replies: [] });
+      savePosts(posts);
+      B45.closeModal();
+      render();
+    });
+  });
+
+  render();
+});
+</script>
+</body>
+</html>
