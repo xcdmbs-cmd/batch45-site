@@ -1,0 +1,128 @@
+[
+  {
+    "id": "heattransfer",
+    "name": "انتقال الحرارة",
+    "nameEn": "Heat Transfer",
+    "code": "CHE 311",
+    "icon": "🔥",
+    "instructor": "د. إيمان بابكر",
+    "credits": 3,
+    "semester": "الفصل الخامس",
+    "description": "أنماط انتقال الحرارة (توصيل، حمل، إشعاع)، المبادلات الحرارية، وتطبيقاتها في تصميم معدات العمليات الكيميائية.",
+    "files": [
+      { "title": "ملزمة المحاضرات 1–4 (التوصيل والحمل)", "kind": "PDF", "size": "3.1 م.ب", "date": "2026-11-02", "url": "assets/demo/lecture-notes.pdf" },
+      { "title": "مسائل محلولة في المبادلات الحرارية", "kind": "PDF", "size": "2.3 م.ب", "date": "2026-11-12", "url": "assets/demo/exam-sample.pdf" },
+      { "title": "جدول معاملات انتقال الحرارة (مرجع)", "kind": "PDF", "size": "0.8 م.ب", "date": "2026-11-05", "url": "" },
+      { "title": "امتحان نهائي 2025 محلول", "kind": "PDF", "size": "1.2 م.ب", "date": "2026-11-18", "url": "assets/demo/exam-sample.pdf" }
+    ]
+  },
+  {
+    "id": "masstransfer",
+    "name": "انتقال الكتلة",
+    "nameEn": "Mass Transfer I",
+    "code": "CHE 312",
+    "icon": "💧",
+    "instructor": "د. محمد الحسن",
+    "credits": 3,
+    "semester": "الفصل الخامس",
+    "description": "الانتشار الجزيئي والحمل الكتلي، معاملات انتقال الكتلة، الاستخلاص، والتجفيف.",
+    "files": [
+      { "title": "ملزمة الانتشار ومعاملات الانتقال", "kind": "PDF", "size": "2.7 م.ب", "date": "2026-11-03", "url": "assets/demo/lecture-notes.pdf" },
+      { "title": "محاضرة الاستخلاص بالمذيبات", "kind": "PDF", "size": "1.5 م.ب", "date": "2026-11-15", "url": "assets/demo/lecture-notes.pdf" },
+      { "title": "مسائل محلولة في التجفيف", "kind": "PDF", "size": "1.1 م.ب", "date": "2026-11-20", "url": "" }
+    ]
+  },
+  {
+    "id": "unitops2",
+    "name": "عمليات الوحدات (2)",
+    "nameEn": "Unit Operations II",
+    "code": "CHE 313",
+    "icon": "⚙️",
+    "instructor": "د. عبد الرحمن عثمان",
+    "credits": 3,
+    "semester": "الفصل الخامس",
+    "description": "التقطير والامتصاص والتجفيف والاستخلاص: المبادئ والتصميم والحسابات الهندسية.",
+    "files": [
+      { "title": "ملخص أبراج التقطير", "kind": "PDF", "size": "1.9 م.ب", "date": "2026-11-06", "url": "assets/demo/lecture-notes.pdf" },
+      { "title": "مسائل محلولة في التقطير والامتصاص", "kind": "PDF", "size": "1.4 م.ب", "date": "2026-11-16", "url": "assets/demo/exam-sample.pdf" },
+      { "title": "امتحان نهائي 2025", "kind": "PDF", "size": "1.0 م.ب", "date": "2026-11-19", "url": "assets/demo/exam-sample.pdf" }
+    ]
+  },
+  {
+    "id": "reactors",
+    "name": "هندسة التفاعلات الكيميائية",
+    "nameEn": "Chemical Reaction Engineering",
+    "code": "CHE 314",
+    "icon": "🧪",
+    "instructor": "د. سارة عبد الله",
+    "credits": 3,
+    "semester": "الفصل الخامس",
+    "description": "حركية التفاعلات، تصميم المفاعلات الدفعية والمستمرة، وتأثير الحرارة على التفاعلات.",
+    "files": [
+      { "title": "مقدمة تصميم المفاعلات", "kind": "PDF", "size": "2.2 م.ب", "date": "2026-11-04", "url": "assets/demo/lecture-notes.pdf" },
+      { "title": "مسائل محلولة في حركية التفاعلات", "kind": "PDF", "size": "1.6 م.ب", "date": "2026-11-14", "url": "assets/demo/exam-sample.pdf" },
+      { "title": "امتحان نهائي 2025 محلول", "kind": "PDF", "size": "1.3 م.ب", "date": "2026-11-21", "url": "assets/demo/exam-sample.pdf" }
+    ]
+  },
+  {
+    "id": "engthermo",
+    "name": "الديناميكا الحرارية الهندسية",
+    "nameEn": "Chemical Engineering Thermodynamics",
+    "code": "CHE 315",
+    "icon": "🌡️",
+    "instructor": "د. هاشم طه",
+    "credits": 3,
+    "semester": "الفصل الخامس",
+    "description": "خواص المواد الحقيقية، الاتزان البخاري والسائل، وحسابات العمليات الحرارية.",
+    "files": [
+      { "title": "ملزمة الخواص والاتزان", "kind": "PDF", "size": "3.0 م.ب", "date": "2026-11-01", "url": "assets/demo/lecture-notes.pdf" },
+      { "title": "جدول خواص الماء والبخار (B.15)", "kind": "PDF", "size": "0.9 م.ب", "date": "2026-11-07", "url": "" },
+      { "title": "مسائل محلولة في الاتزان", "kind": "PDF", "size": "1.2 م.ب", "date": "2026-11-17", "url": "" }
+    ]
+  },
+  {
+    "id": "numerical",
+    "name": "الطرق العددية للهندسة",
+    "nameEn": "Numerical Methods",
+    "code": "MATH 311",
+    "icon": "📐",
+    "instructor": "د. نعمات الفكي",
+    "credits": 2,
+    "semester": "الفصل الخامس",
+    "description": "حل المعادلات غير الخطية، التكامل العددي، حل المعادلات التفاضلية، وتطبيقاتها الهندسية.",
+    "files": [
+      { "title": "ملزمة الحلول العددية للمعادلات", "kind": "PDF", "size": "2.0 م.ب", "date": "2026-11-05", "url": "assets/demo/lecture-notes.pdf" },
+      { "title": "مسائل Newton-Raphson و Runge-Kutta", "kind": "PDF", "size": "1.1 م.ب", "date": "2026-11-18", "url": "assets/demo/exam-sample.pdf" }
+    ]
+  },
+  {
+    "id": "control",
+    "name": "ضبط العمليات",
+    "nameEn": "Process Control",
+    "code": "CHE 317",
+    "icon": "🎛️",
+    "instructor": "د. عمر الصادق",
+    "credits": 3,
+    "semester": "الفصل الخامس",
+    "description": "نمذجة الأنظمة، استجابة الأنظمة الديناميكية، المتحكمات PID وتطبيقاتها في الصناعة.",
+    "files": [
+      { "title": "مقدمة أنظمة التحكم", "kind": "PDF", "size": "1.8 م.ب", "date": "2026-11-09", "url": "assets/demo/lecture-notes.pdf" },
+      { "title": "مسائل استجابة الأنظمة", "kind": "PDF", "size": "1.0 م.ب", "date": "2026-11-19", "url": "" }
+    ]
+  },
+  {
+    "id": "unitopslab",
+    "name": "مختبر عمليات الوحدات",
+    "nameEn": "Unit Operations Lab",
+    "code": "CHE 318",
+    "icon": "🔬",
+    "instructor": "د. عوض الكريم إبراهيم",
+    "credits": 2,
+    "semester": "الفصل الخامس",
+    "description": "تجارب عملية في انتقال الحرارة والكتلة والتقطير مع كتابة التقارير وتحليل النتائج.",
+    "files": [
+      { "title": "دليل المختبر (التجارب والتقارير)", "kind": "PDF", "size": "2.4 م.ب", "date": "2026-11-08", "url": "assets/demo/lecture-notes.pdf" },
+      { "title": "قالب تقرير المختبر المعتمد", "kind": "PDF", "size": "0.5 م.ب", "date": "2026-11-10", "url": "assets/demo/exam-sample.pdf" }
+    ]
+  }
+]
