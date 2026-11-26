@@ -1,0 +1,713 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex, nofollow">
+<title>لوحة إدارة بوابة الدفعة 45</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Amiri:wght@400;700&family=Cairo:wght@300;400;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="assets/css/style.css">
+<link rel="icon" href="assets/img/favicon.svg" type="image/svg+xml">
+<style>
+  body{background:#F4F1E9}
+  .admin-top{background:linear-gradient(135deg,#0B1F3A,#122B4E 70%,#1B3A66);color:#fff;padding:1rem 0}
+  .admin-top .container{display:flex;align-items:center;justify-content:space-between;gap:1rem;flex-wrap:wrap}
+  .admin-top h1{color:#fff;font-size:1.15rem;margin:0;display:flex;align-items:center;gap:.6rem}
+  .admin-top .crest{width:38px;height:38px}
+  .admin-top .links{display:flex;gap:.6rem;flex-wrap:wrap}
+  .admin-top .links a{font-size:.8rem;color:#C9D3E3;text-decoration:none;border:1px solid rgba(255,255,255,.25);border-radius:999px;padding:.3em .9em}
+  .admin-top .links a:hover{color:var(--gold-2);border-color:var(--gold-2)}
+  .admin-wrap{padding:1.8rem 0 4rem}
+  .card.admin-card{margin-bottom:1.4rem}
+  .card.admin-card h2{font-size:1.25rem;display:flex;align-items:center;gap:.5rem;margin-top:0}
+  .card.admin-card h2 .step{background:var(--navy-800);color:var(--gold-2);width:30px;height:30px;border-radius:50%;display:grid;place-items:center;font-family:var(--font-body);font-size:.9rem}
+  .grid-form{display:grid;grid-template-columns:repeat(2,1fr);gap:.8rem}
+  .grid-form .full{grid-column:1/-1}
+  label.f{display:block;font-size:.8rem;font-weight:700;color:var(--navy-800);margin-bottom:.25rem}
+  .fld{width:100%;border:1px solid var(--line);background:#fff;border-radius:9px;padding:.6em .8em;font-family:inherit;font-size:.88rem;outline:none}
+  .fld:focus{border-color:var(--gold);box-shadow:0 0 0 3px rgba(201,162,39,.14)}
+  textarea.fld{min-height:80px;resize:vertical}
+  .hint{font-size:.75rem;color:var(--muted);margin:.2rem 0 .6rem}
+  .row-actions{display:flex;gap:.5rem;flex-wrap:wrap;margin-top:.8rem}
+  .btn-danger{background:#FBE9E7;color:#A3342F;border:1px solid #F1C9C4;border-radius:999px;padding:.45em 1em;font-family:inherit;font-size:.82rem;font-weight:700;cursor:pointer}
+  .btn-soft{background:#EEF2F8;color:var(--navy-700);border:1px solid #DCE3EE;border-radius:999px;padding:.45em 1em;font-family:inherit;font-size:.82rem;font-weight:700;cursor:pointer}
+  .log-box{background:#0B1F3A;color:#C9D3E3;border-radius:10px;padding:.8rem 1rem;font-family:Consolas,monospace;font-size:.78rem;max-height:240px;overflow:auto;direction:ltr;text-align:left;margin-top:.9rem;white-space:pre-wrap}
+  .log-box .ok{color:#7EE2B8}
+  .log-box .err{color:#FF9B8F}
+  .status-pill{display:inline-flex;align-items:center;gap:.4rem;font-size:.78rem;font-weight:700;border-radius:999px;padding:.25em .8em;background:#EEF2F8;color:var(--muted)}
+  .status-pill.ok{background:#E4F2EA;color:#2F7D5B}
+  .status-pill.bad{background:#FBE9E7;color:#A3342F}
+  .item-row{display:flex;align-items:center;gap:.8rem;padding:.7rem .9rem;border:1px solid var(--line);border-radius:10px;background:#fff;margin-bottom:.55rem;flex-wrap:wrap}
+  .item-row .grow{flex:1;min-width:180px}
+  .item-row b{display:block;font-size:.9rem;color:var(--navy-800)}
+  .item-row small{color:var(--muted);font-size:.75rem}
+  .hidden{display:none!important}
+  .files-editor{border:1px dashed var(--line);border-radius:10px;padding:.7rem;margin-top:.6rem;background:#FCFAF4}
+  .file-edit{display:grid;grid-template-columns:1.4fr 2fr .6fr .7fr .8fr auto;gap:.4rem;margin-bottom:.4rem;align-items:center}
+  .file-edit .fld{padding:.45em .6em;font-size:.78rem}
+  .pub-url{background:#E4F2EA;border:1px solid #BFE3CF;border-radius:12px;padding:1rem 1.2rem;margin-top:1rem;word-break:break-all}
+  .pub-url a{font-weight:800;color:#1F6B47;font-size:1.05rem}
+  .notice-mini{font-size:.78rem;color:var(--muted);background:#FBF7EA;border:1px solid #EADCA9;border-radius:9px;padding:.6rem .9rem;margin:.6rem 0}
+  @media(max-width:760px){.grid-form{grid-template-columns:1fr}.file-edit{grid-template-columns:1fr 1fr}}
+  .admin-tabs{display:flex;gap:.4rem;flex-wrap:wrap;border-bottom:1px solid var(--line);margin-bottom:1.2rem}
+  .admin-tab{background:none;border:0;border-bottom:3px solid transparent;padding:.6rem .9rem;font-weight:800;color:var(--muted);cursor:pointer;font-size:.86rem}
+  .admin-tab.active{color:var(--navy-800);border-bottom-color:var(--gold)}
+  .admin-panel{display:none}.admin-panel.active{display:block}
+</style>
+</head>
+<body>
+
+<header class="admin-top">
+  <div class="container">
+    <h1>
+      <svg class="crest" viewBox="0 0 64 64"><defs><linearGradient id="ag" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#F2DC8F"/><stop offset=".55" stop-color="#E1C25B"/><stop offset="1" stop-color="#B98F1D"/></linearGradient></defs><path d="M32 3.5 55 11.6v16.6c0 14.6-9.8 25.6-23 32.3-13.2-6.7-23-17.7-23-32.3V11.6Z" fill="none" stroke="url(#ag)" stroke-width="2.2"/><path d="M27.6 17.5h8.8v5.3l5.4 11.6a3.6 3.6 0 0 1-3.3 5.1H25.5a3.6 3.6 0 0 1-3.3-5.1l5.4-11.6Z" fill="none" stroke="url(#ag)" stroke-width="1.9"/><text x="32" y="52.4" text-anchor="middle" font-family="Georgia,serif" font-size="7.4" font-weight="bold" fill="url(#ag)">45</text></svg>
+      لوحة إدارة بوابة الدفعة 45
+    </h1>
+    <div class="links">
+      <a href="index.html" target="_blank">معاينة الموقع ↗</a>
+      <a href="README.md" target="_blank">الدليل</a>
+    </div>
+  </div>
+</header>
+
+<main class="container admin-wrap">
+
+  <!-- 1) Setup -->
+  <section class="card admin-card" id="setupCard">
+    <h2><span class="step">1</span> ربط حساب GitHub (مرة واحدة)</h2>
+    <p class="hint">يُستخدم GitHub لنشر الموقع بشكل دائم (GitHub Pages) ولحفظ الإضافات والتعديلات من داخل هذه اللوحة.
+      لا تُرسل كلمة مرور GitHub أبدًا — نستخدم «توكن» مخصص يمكنك حذفه في أي وقت.</p>
+
+    <div class="notice-mini">
+      <b>كيف تنشئ التوكن؟</b><br>
+      1) افتح <a href="https://github.com/settings/tokens/new" target="_blank">github.com/settings/tokens/new</a> (أنشئ حسابًا مجانيًا إن لم يكن لديك).<br>
+      2) Note: <code>Batch45 Admin</code> — Expiration: 90 يومًا — Scope: اختر <b>repo</b> فقط.<br>
+      3) اضغط Generate token وانسخه (يبدأ بـ <code>ghp_</code>) ثم الصقه هنا.
+    </div>
+
+    <div class="grid-form">
+      <div>
+        <label class="f" for="ghOwner">اسم حساب GitHub</label>
+        <input class="fld" id="ghOwner" placeholder="username" autocomplete="off">
+      </div>
+      <div>
+        <label class="f" for="ghRepo">اسم المستودع (سيُنشأ تلقائيًا)</label>
+        <input class="fld" id="ghRepo" value="batch45-site" autocomplete="off">
+      </div>
+      <div class="full">
+        <label class="f" for="ghToken">التوكن (Personal Access Token)</label>
+        <input class="fld" id="ghToken" type="password" placeholder="ghp_..." autocomplete="off">
+      </div>
+    </div>
+    <div class="row-actions">
+      <button class="btn btn-gold btn-sm" id="btnConnect">حفظ واختبار الاتصال</button>
+      <span class="status-pill" id="connStatus">غير متصل</span>
+    </div>
+    <p class="hint" style="margin-top:.7rem">🔒 يُحفظ التوكن في متصفحك فقط (localStorage) ولا يُرفع للموقع أو المستودع.</p>
+  </section>
+
+  <!-- 2) Publish -->
+  <section class="card admin-card hidden" id="publishCard">
+    <h2><span class="step">2</span> النشر الدائم على الإنترنت</h2>
+    <p class="hint">بالضغط على الزر أدناه سيقوم النظام تلقائيًا بـ: إنشاء المستودع (إن لم يكن موجودًا) ← رفع جميع ملفات الموقع ← تفعيل GitHub Pages ← إعطاؤك الرابط الدائم.</p>
+    <div class="row-actions">
+      <button class="btn btn-gold" id="btnPublish">🚀 انشر الموقع الآن (دائم)</button>
+      <button class="btn-soft" id="btnRepublish">🔄 تحديث كل الملفات</button>
+    </div>
+    <div class="log-box hidden" id="pubLog"></div>
+    <div class="pub-url hidden" id="pubUrlBox"></div>
+  </section>
+
+  <!-- 3) Editor -->
+  <section class="card admin-card hidden" id="editorCard">
+    <h2><span class="step">3</span> إضافة وتعديل المحتوى</h2>
+    <p class="hint">كل حفظ هنا يُرسل مباشرة إلى المستودع ويظهر على الرابط الدائم خلال دقيقة تقريبًا.</p>
+
+    <div class="admin-tabs" id="adminTabs">
+      <button class="admin-tab active" data-tab="news">📰 الأخبار</button>
+      <button class="admin-tab" data-tab="courses">📚 المقررات والملفات</button>
+      <button class="admin-tab" data-tab="events">🎉 الفعاليات</button>
+      <button class="admin-tab" data-tab="members">👥 الأعضاء</button>
+      <button class="admin-tab" data-tab="raw">🧩 JSON مباشر</button>
+    </div>
+
+    <!-- NEWS -->
+    <div class="admin-panel active" id="panel-news">
+      <div class="row-actions" style="margin-bottom:1rem">
+        <button class="btn btn-gold btn-sm" id="newsAdd">＋ خبر جديد</button>
+        <button class="btn-soft btn-sm" id="newsReload">↻ إعادة تحميل</button>
+      </div>
+      <div id="newsFormBox" class="hidden files-editor" style="background:#fff;border-style:solid">
+        <div class="grid-form">
+          <div class="full"><label class="f">العنوان</label><input class="fld" id="nTitle"></div>
+          <div><label class="f">التصنيف</label><select class="fld" id="nCat"><option>إعلان</option><option>أكاديمي</option><option>فعالية</option><option>هام</option></select></div>
+          <div><label class="f">التاريخ</label><input class="fld" id="nDate" type="date"></div>
+          <div><label class="f">الكاتب</label><input class="fld" id="nAuthor" value="مكتب الدفعة"></div>
+          <div><label class="f">مثبّت؟</label><select class="fld" id="nPinned"><option value="false">لا</option><option value="true">نعم</option></select></div>
+          <div class="full"><label class="f">الملخص</label><input class="fld" id="nExcerpt"></div>
+          <div class="full"><label class="f">النص الكامل (يدعم HTML)</label><textarea class="fld" id="nBody" style="min-height:120px"></textarea></div>
+        </div>
+        <div class="row-actions">
+          <button class="btn btn-gold btn-sm" id="newsSave">💾 حفظ الخبر</button>
+          <button class="btn-soft btn-sm" id="newsCancel">إلغاء</button>
+        </div>
+      </div>
+      <div id="newsList"></div>
+    </div>
+
+    <!-- COURSES -->
+    <div class="admin-panel" id="panel-courses">
+      <div class="row-actions" style="margin-bottom:1rem">
+        <button class="btn btn-gold btn-sm" id="courseAdd">＋ مقرر جديد</button>
+        <button class="btn-soft btn-sm" id="courseReload">↻ إعادة تحميل</button>
+      </div>
+      <div id="courseFormBox" class="hidden files-editor" style="background:#fff;border-style:solid">
+        <div class="grid-form">
+          <div><label class="f">اسم المقرر</label><input class="fld" id="cName"></div>
+          <div><label class="f">الرمز</label><input class="fld" id="cCode" placeholder="CHE 311"></div>
+          <div><label class="f">الدكتور</label><input class="fld" id="cInstructor"></div>
+          <div><label class="f">الساعات</label><input class="fld" id="cCredits" type="number" value="3"></div>
+          <div><label class="f">أيقونة (إيموجي)</label><input class="fld" id="cIcon" value="📘"></div>
+          <div><label class="f">الفصل</label><input class="fld" id="cSemester" value="الفصل الخامس"></div>
+          <div class="full"><label class="f">الوصف</label><textarea class="fld" id="cDesc"></textarea></div>
+        </div>
+        <div style="margin-top:.6rem">
+          <label class="f">ملفات المقرر</label>
+          <div id="cFiles"></div>
+          <button class="btn-soft btn-sm" id="cFileAdd">＋ إضافة ملف</button>
+          <label class="btn-soft btn-sm" style="display:inline-block;cursor:pointer">
+            ⬆️ رفع PDF
+            <input type="file" id="cFileUpload" accept=".pdf,.doc,.docx,.ppt,.pptx,.zip" style="display:none">
+          </label>
+          <span class="hint" id="uploadStatus"></span>
+        </div>
+        <div class="row-actions">
+          <button class="btn btn-gold btn-sm" id="courseSave">💾 حفظ المقرر</button>
+          <button class="btn-soft btn-sm" id="courseCancel">إلغاء</button>
+        </div>
+      </div>
+      <div id="courseList"></div>
+    </div>
+
+    <!-- EVENTS -->
+    <div class="admin-panel" id="panel-events">
+      <div class="row-actions" style="margin-bottom:1rem">
+        <button class="btn btn-gold btn-sm" id="eventAdd">＋ فعالية جديدة</button>
+        <button class="btn-soft btn-sm" id="eventReload">↻ إعادة تحميل</button>
+      </div>
+      <div id="eventFormBox" class="hidden files-editor" style="background:#fff;border-style:solid">
+        <div class="grid-form">
+          <div class="full"><label class="f">العنوان</label><input class="fld" id="eTitle"></div>
+          <div><label class="f">التاريخ</label><input class="fld" id="eDate" type="date"></div>
+          <div><label class="f">الوقت</label><input class="fld" id="eTime" placeholder="11:00"></div>
+          <div><label class="f">المكان</label><input class="fld" id="ePlace"></div>
+          <div><label class="f">النوع</label><input class="fld" id="eType" value="فعالية"></div>
+          <div class="full"><label class="f">الوصف</label><textarea class="fld" id="eDesc"></textarea></div>
+        </div>
+        <div class="row-actions">
+          <button class="btn btn-gold btn-sm" id="eventSave">💾 حفظ الفعالية</button>
+          <button class="btn-soft btn-sm" id="eventCancel">إلغاء</button>
+        </div>
+      </div>
+      <div id="eventList"></div>
+    </div>
+
+    <!-- MEMBERS -->
+    <div class="admin-panel" id="panel-members">
+      <div class="row-actions" style="margin-bottom:1rem">
+        <button class="btn btn-gold btn-sm" id="memberAdd">＋ عضو جديد</button>
+        <button class="btn-soft btn-sm" id="memberReload">↻ إعادة تحميل</button>
+      </div>
+      <div id="memberFormBox" class="hidden files-editor" style="background:#fff;border-style:solid">
+        <div class="grid-form">
+          <div><label class="f">الاسم</label><input class="fld" id="mName"></div>
+          <div><label class="f">الدور</label><input class="fld" id="mRole" value="عضو"></div>
+          <div><label class="f">الاهتمامات (مفصولة بفاصلة)</label><input class="fld" id="mInterests"></div>
+          <div><label class="f">رابط تواصل (اختياري)</label><input class="fld" id="mContact" placeholder="https://t.me/..."></div>
+        </div>
+        <div class="row-actions">
+          <button class="btn btn-gold btn-sm" id="memberSave">💾 حفظ العضو</button>
+          <button class="btn-soft btn-sm" id="memberCancel">إلغاء</button>
+        </div>
+      </div>
+      <div id="memberList"></div>
+    </div>
+
+    <!-- RAW JSON -->
+    <div class="admin-panel" id="panel-raw">
+      <div class="grid-form">
+        <div><label class="f">الملف</label>
+          <select class="fld" id="rawFile">
+            <option value="news.json">news.json — الأخبار</option>
+            <option value="courses.json">courses.json — المقررات</option>
+            <option value="schedule.json">schedule.json — الجدول والامتحانات</option>
+            <option value="exams.json">exams.json — بنك الأسئلة</option>
+            <option value="events.json">events.json — الفعاليات</option>
+            <option value="members.json">members.json — الأعضاء</option>
+            <option value="forum.json">forum.json — المنتدى</option>
+            <option value="config.json">config.json — الإعدادات وكلمة المرور</option>
+          </select>
+        </div>
+        <div style="align-self:end"><button class="btn-soft btn-sm" id="rawLoad">↻ تحميل الملف</button></div>
+        <div class="full"><label class="f">المحتوى (JSON)</label><textarea class="fld" id="rawText" style="min-height:340px;font-family:Consolas,monospace;direction:ltr;text-align:left"></textarea></div>
+      </div>
+      <div class="row-actions"><button class="btn btn-gold btn-sm" id="rawSave">💾 حفظ على الموقع</button></div>
+      <p class="hint">⚠️ احترس من الصيغة: أي خطأ في JSON سيمنع الصفحات من العرض. استخدم زر «تحميل الملف» للرجوع للنسخة الحالية.</p>
+    </div>
+  </section>
+
+  <p class="hint center" style="margin-top:1rem">لوحة الإدارة غير مرتبطة بقوائم الموقع — احتفظ برابطها لنفسك: <code>admin.html</code></p>
+</main>
+
+<script>
+'use strict';
+const LS_KEY = 'b45_admin_cfg';
+const state = {
+  cfg: null,
+  repo: null,
+  news: [], courses: [], events: [], members: [],
+  editingNews: null, editingCourse: null, editingEvent: null, editingMember: null,
+  publishing: false
+};
+const $ = (id) => document.getElementById(id);
+const esc = (s) => String(s == null ? '' : s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+const todayISO = () => new Date().toISOString().slice(0,10);
+
+/* ---------------- GitHub API ---------------- */
+async function gh(path, opts = {}) {
+  const headers = {
+    'Accept': 'application/vnd.github+json',
+    'Authorization': 'Bearer ' + state.cfg.token,
+    'X-GitHub-Api-Version': '2022-11-28'
+  };
+  if (opts.body) headers['Content-Type'] = 'application/json';
+  const res = await fetch('https://api.github.com' + path, { ...opts, headers });
+  let data = null;
+  try { data = await res.json(); } catch (e) {}
+  if (!res.ok) {
+    const msg = (data && data.message) ? data.message : ('HTTP ' + res.status);
+    const err = new Error(msg); err.status = res.status; throw err;
+  }
+  return data;
+}
+function b64FromArrayBuffer(buf) {
+  const bytes = new Uint8Array(buf);
+  let binary = '';
+  const chunk = 0x8000;
+  for (let i = 0; i < bytes.length; i += chunk) {
+    binary += String.fromCharCode.apply(null, bytes.subarray(i, i + chunk));
+  }
+  return btoa(binary);
+}
+function b64FromString(str) {
+  return btoa(unescape(encodeURIComponent(str)));
+}
+async function getSha(path) {
+  try {
+    const d = await gh('/repos/' + state.cfg.owner + '/' + state.cfg.repo + '/contents/' + path + '?ref=' + (state.repo.default_branch || 'main'));
+    return d.sha;
+  } catch (e) { return null; }
+}
+async function putFile(path, b64, message) {
+  const sha = await getSha(path);
+  const body = { message: message || ('تحديث ' + path), content: b64, branch: state.repo.default_branch || 'main' };
+  if (sha) body.sha = sha;
+  return gh('/repos/' + state.cfg.owner + '/' + state.cfg.repo + '/contents/' + path, { method: 'PUT', body: JSON.stringify(body) });
+}
+
+/* ---------------- Setup ---------------- */
+function loadCfg() {
+  try { state.cfg = JSON.parse(localStorage.getItem(LS_KEY) || 'null'); } catch (e) { state.cfg = null; }
+  if (state.cfg) {
+    $('ghOwner').value = state.cfg.owner || '';
+    $('ghRepo').value = state.cfg.repo || 'batch45-site';
+    $('ghToken').value = state.cfg.token || '';
+  }
+}
+async function connect(silent) {
+  const owner = $('ghOwner').value.trim();
+  const repo = $('ghRepo').value.trim() || 'batch45-site';
+  const token = $('ghToken').value.trim();
+  if (!owner || !token) { setStatus('أدخل اسم الحساب والتوكن', 'bad'); return; }
+  state.cfg = { owner: owner, repo: repo, token: token };
+  setStatus('جارٍ الاختبار…');
+  try {
+    const user = await gh('/user');
+    if (user.login.toLowerCase() !== owner.toLowerCase()) {
+      setStatus('التوكن يخص الحساب ' + user.login + ' وليس ' + owner, 'bad'); return;
+    }
+    localStorage.setItem(LS_KEY, JSON.stringify(state.cfg));
+    setStatus('متصل بـ ' + user.login, 'ok');
+    showSections();
+    await loadRepo(true);
+    await loadAllData();
+  } catch (e) {
+    setStatus('فشل الاتصال: ' + e.message, 'bad');
+  }
+}
+function setStatus(txt, cls) {
+  const el = $('connStatus');
+  el.textContent = txt; el.className = 'status-pill' + (cls ? ' ' + cls : '');
+}
+async function loadRepo(create) {
+  try {
+    state.repo = await gh('/repos/' + state.cfg.owner + '/' + state.cfg.repo);
+  } catch (e) {
+    if (e.status === 404 && create) {
+      log('إنشاء المستودع أول مرة…');
+      state.repo = await gh('/user/repos', { method: 'POST', body: JSON.stringify({ name: state.cfg.repo, private: false, description: 'Batch 45 Engineering Portal', auto_init: true }) });
+    } else { throw e; }
+  }
+  try {
+    const pages = await gh('/repos/' + state.cfg.owner + '/' + state.cfg.repo + '/pages');
+    if (pages && pages.html_url) showPubUrl(pages.html_url);
+  } catch (e) {}
+}
+function showSections() {
+  $('setupCard').classList.add('hidden');
+  $('publishCard').classList.remove('hidden');
+  $('editorCard').classList.remove('hidden');
+}
+function showPubUrl(url) {
+  const box = $('pubUrlBox');
+  box.classList.remove('hidden');
+  box.innerHTML = '✅ رابط الموقع الدائم: <a href="' + esc(url) + '" target="_blank">' + esc(url) + '</a><br><small class="hint">قد يستغرق أول نشر 1–2 دقيقة حتى يعمل الرابط.</small>';
+}
+
+/* ---------------- Publish ---------------- */
+const PUBLISH_FILES = [
+  'index.html','news.html','library.html','schedule.html','exams.html','events.html','forum.html','members.html','about.html','404.html',
+  'admin.html','robots.txt','_headers','README.md',
+  'assets/css/style.css','assets/js/app.js','assets/img/favicon.svg',
+  'assets/demo/lecture-notes.pdf','assets/demo/exam-sample.pdf',
+  'data/config.json','data/news.json','data/courses.json','data/schedule.json',
+  'data/exams.json','data/events.json','data/members.json','data/forum.json'
+];
+function log(msg, cls) {
+  const box = $('pubLog');
+  box.classList.remove('hidden');
+  const line = document.createElement('div');
+  if (cls) line.className = cls;
+  line.textContent = msg;
+  box.appendChild(line);
+  box.scrollTop = box.scrollHeight;
+}
+async function publish() {
+  if (state.publishing) return;
+  state.publishing = true;
+  $('pubLog').innerHTML = '';
+  $('btnPublish').disabled = true;
+  try {
+    log('1/3 — التحقق من المستودع…');
+    await loadRepo(true);
+    log('✔ المستودع: ' + state.repo.full_name, 'ok');
+    log('2/3 — رفع الملفات…');
+    for (const f of PUBLISH_FILES) {
+      try {
+        const res = await fetch(f, { cache: 'no-store' });
+        if (!res.ok) { log('تخطي (غير موجود): ' + f); continue; }
+        const buf = await res.arrayBuffer();
+        await putFile(f, b64FromArrayBuffer(buf), 'نشر: ' + f);
+        log('✔ ' + f, 'ok');
+      } catch (e) { log('✖ ' + f + ' — ' + e.message, 'err'); }
+    }
+    log('3/3 — تفعيل GitHub Pages…');
+    try {
+      await gh('/repos/' + state.cfg.owner + '/' + state.cfg.repo + '/pages', { method: 'POST', body: JSON.stringify({ source: { branch: state.repo.default_branch || 'main', path: '/' } }) });
+      log('✔ تم تفعيل Pages', 'ok');
+    } catch (e) {
+      if (e.status === 409) log('✔ Pages مفعّل مسبقًا', 'ok');
+      else log('Pages: ' + e.message, 'err');
+    }
+    const url = 'https://' + state.cfg.owner.toLowerCase() + '.github.io/' + state.cfg.repo + '/';
+    log('✅ تم! الرابط الدائم: ' + url, 'ok');
+    showPubUrl(url);
+    log('ملاحظة: أول نشر قد يحتاج دقيقة أو دقيقتين ليصبح الرابط جاهزًا.');
+  } catch (e) {
+    log('✖ فشل النشر: ' + e.message, 'err');
+  } finally {
+    state.publishing = false;
+    $('btnPublish').disabled = false;
+  }
+}
+
+/* ---------------- Data ---------------- */
+async function getJSON(file) {
+  const res = await fetch('data/' + file, { cache: 'no-store' });
+  return res.json();
+}
+async function saveJSON(file, data) {
+  await putFile('data/' + file, b64FromString(JSON.stringify(data, null, 2)), 'تحرير: ' + file);
+  log('💾 حُفظ ' + file + ' على المستودع — سيظهر على الموقع خلال دقيقة.', 'ok');
+}
+async function loadAllData() {
+  try {
+    state.news = await getJSON('news.json');
+    state.courses = await getJSON('courses.json');
+    state.events = await getJSON('events.json');
+    state.members = await getJSON('members.json');
+    renderNews(); renderCourses(); renderEvents(); renderMembers();
+  } catch (e) { log('تعذّر تحميل البيانات المحلية: ' + e.message, 'err'); }
+}
+
+/* ---------------- News ---------------- */
+function renderNews() {
+  const box = $('newsList');
+  box.innerHTML = state.news.map((n, i) =>
+    '<div class="item-row"><div class="grow"><b>' + esc(n.title) + '</b><small>' + esc(n.category) + ' · ' + esc(n.date) + ' · ' + esc(n.author || '') + (n.pinned ? ' · 📌' : '') + '</small></div>' +
+    '<button class="btn-soft btn-sm" data-news-edit="' + i + '">تعديل</button>' +
+    '<button class="btn-danger" data-news-del="' + i + '">حذف</button></div>'
+  ).join('') || '<p class="hint">لا توجد أخبار بعد.</p>';
+  document.querySelectorAll('[data-news-edit]').forEach(b => b.onclick = () => editNews(+b.dataset.newsEdit));
+  document.querySelectorAll('[data-news-del]').forEach(b => b.onclick = async () => {
+    if (!confirm('حذف هذا الخبر نهائيًا؟')) return;
+    state.news.splice(+b.dataset.newsDel, 1); await saveJSON('news.json', state.news); renderNews();
+  });
+}
+function editNews(i) {
+  state.editingNews = i;
+  const n = state.news[i];
+  $('nTitle').value = n.title; $('nCat').value = n.category; $('nDate').value = n.date;
+  $('nAuthor').value = n.author || ''; $('nPinned').value = String(!!n.pinned);
+  $('nExcerpt').value = n.excerpt || ''; $('nBody').value = n.body || '';
+  $('newsFormBox').classList.remove('hidden');
+}
+$('newsAdd').onclick = () => {
+  state.editingNews = null;
+  $('nTitle').value = ''; $('nCat').value = 'إعلان'; $('nDate').value = todayISO();
+  $('nAuthor').value = 'مكتب الدفعة'; $('nPinned').value = 'false'; $('nExcerpt').value = ''; $('nBody').value = '';
+  $('newsFormBox').classList.remove('hidden');
+};
+$('newsCancel').onclick = () => $('newsFormBox').classList.add('hidden');
+$('newsReload').onclick = async () => { state.news = await getJSON('news.json'); renderNews(); };
+$('newsSave').onclick = async () => {
+  const item = {
+    id: (state.editingNews != null ? state.news[state.editingNews].id : 'news-' + Date.now()),
+    pinned: $('nPinned').value === 'true',
+    category: $('nCat').value,
+    title: $('nTitle').value.trim(),
+    date: $('nDate').value || todayISO(),
+    author: $('nAuthor').value.trim(),
+    excerpt: $('nExcerpt').value.trim(),
+    body: $('nBody').value.trim()
+  };
+  if (!item.title) { alert('العنوان مطلوب'); return; }
+  try {
+    if (state.editingNews != null) state.news[state.editingNews] = item; else state.news.unshift(item);
+    await saveJSON('news.json', state.news);
+    $('newsFormBox').classList.add('hidden'); renderNews();
+  } catch (e) { alert('فشل الحفظ: ' + e.message); }
+};
+
+/* ---------------- Courses ---------------- */
+function renderCourses() {
+  const box = $('courseList');
+  box.innerHTML = state.courses.map((c, i) =>
+    '<div class="item-row"><div class="grow"><b>' + esc(c.icon || '') + ' ' + esc(c.name) + '</b><small>' + esc(c.code) + ' · ' + esc(c.instructor) + ' · ' + ((c.files || []).length) + ' ملف</small></div>' +
+    '<button class="btn-soft btn-sm" data-course-edit="' + i + '">تعديل</button>' +
+    '<button class="btn-danger" data-course-del="' + i + '">حذف</button></div>'
+  ).join('') || '<p class="hint">لا توجد مقررات.</p>';
+  document.querySelectorAll('[data-course-edit]').forEach(b => b.onclick = () => editCourse(+b.dataset.courseEdit));
+  document.querySelectorAll('[data-course-del]').forEach(b => b.onclick = async () => {
+    if (!confirm('حذف هذا المقرر نهائيًا؟')) return;
+    state.courses.splice(+b.dataset.courseDel, 1); await saveJSON('courses.json', state.courses); renderCourses();
+  });
+}
+function fileRowHtml(f, idx) {
+  return '<div class="file-edit" data-fi="' + idx + '">' +
+    '<input class="fld" data-k="title" placeholder="عنوان الملف" value="' + esc(f.title || '') + '">' +
+    '<input class="fld" data-k="url" placeholder="رابط أو assets/files/..." value="' + esc(f.url || '') + '">' +
+    '<input class="fld" data-k="kind" placeholder="PDF" value="' + esc(f.kind || 'PDF') + '">' +
+    '<input class="fld" data-k="size" placeholder="1.2 م.ب" value="' + esc(f.size || '') + '">' +
+    '<input class="fld" data-k="date" type="date" value="' + esc(f.date || '') + '">' +
+    '<button class="btn-danger" data-del-f="' + idx + '">✕</button></div>';
+}
+function renderCourseFiles(files) {
+  $('cFiles').innerHTML = files.map(fileRowHtml).join('');
+  document.querySelectorAll('#cFiles [data-del-f]').forEach(b => b.onclick = () => {
+    const idx = +b.dataset.delF; const rows = readCourseFiles(); rows.splice(idx, 1); renderCourseFiles(rows);
+  });
+}
+function readCourseFiles() {
+  const rows = [];
+  document.querySelectorAll('#cFiles .file-edit').forEach(r => {
+    const o = {};
+    r.querySelectorAll('input[data-k]').forEach(inp => o[inp.dataset.k] = inp.value.trim());
+    if (o.title) rows.push(o);
+  });
+  return rows;
+}
+let editingCourseFiles = [];
+function editCourse(i) {
+  state.editingCourse = i;
+  const c = state.courses[i];
+  $('cName').value = c.name; $('cCode').value = c.code || ''; $('cInstructor').value = c.instructor || '';
+  $('cCredits').value = c.credits || 3; $('cIcon').value = c.icon || '📘'; $('cSemester').value = c.semester || 'الفصل الخامس';
+  $('cDesc').value = c.description || '';
+  editingCourseFiles = (c.files || []).map(f => ({ ...f }));
+  renderCourseFiles(editingCourseFiles);
+  $('courseFormBox').classList.remove('hidden');
+}
+$('courseAdd').onclick = () => {
+  state.editingCourse = null;
+  ['cName','cCode','cInstructor','cDesc'].forEach(id => $(id).value = '');
+  $('cCredits').value = 3; $('cIcon').value = '📘'; $('cSemester').value = 'الفصل الخامس';
+  renderCourseFiles([]);
+  $('courseFormBox').classList.remove('hidden');
+};
+$('courseCancel').onclick = () => $('courseFormBox').classList.add('hidden');
+$('courseReload').onclick = async () => { state.courses = await getJSON('courses.json'); renderCourses(); };
+$('cFileAdd').onclick = () => {
+  const rows = readCourseFiles(); rows.push({ title: '', url: '', kind: 'PDF', size: '', date: todayISO() });
+  renderCourseFiles(rows);
+};
+$('cFileUpload').onchange = async (ev) => {
+  const f = ev.target.files[0]; if (!f) return;
+  const status = $('uploadStatus');
+  try {
+    status.textContent = 'جارٍ الرفع…';
+    const buf = await f.arrayBuffer();
+    const safe = f.name.replace(/[^\w.\-]+/g, '_');
+    await putFile('assets/files/' + safe, b64FromArrayBuffer(buf), 'رفع ملف: ' + safe);
+    const rows = readCourseFiles();
+    rows.push({ title: f.name.replace(/\.[^.]+$/, ''), url: 'assets/files/' + safe, kind: (f.name.split('.').pop() || 'pdf').toUpperCase(), size: (f.size / 1048576).toFixed(1) + ' م.ب', date: todayISO() });
+    renderCourseFiles(rows);
+    status.textContent = '✅ رُفع: ' + safe;
+  } catch (e) { status.textContent = '✖ ' + e.message; }
+  ev.target.value = '';
+};
+$('courseSave').onclick = async () => {
+  const item = {
+    id: (state.editingCourse != null ? state.courses[state.editingCourse].id : 'course-' + Date.now()),
+    name: $('cName').value.trim(), nameEn: '', code: $('cCode').value.trim(),
+    icon: $('cIcon').value.trim(), instructor: $('cInstructor').value.trim(),
+    credits: +$('cCredits').value || 3, semester: $('cSemester').value.trim(),
+    description: $('cDesc').value.trim(), files: readCourseFiles()
+  };
+  if (!item.name) { alert('اسم المقرر مطلوب'); return; }
+  try {
+    if (state.editingCourse != null) state.courses[state.editingCourse] = item; else state.courses.push(item);
+    await saveJSON('courses.json', state.courses);
+    $('courseFormBox').classList.add('hidden'); renderCourses();
+  } catch (e) { alert('فشل الحفظ: ' + e.message); }
+};
+
+/* ---------------- Events ---------------- */
+function renderEvents() {
+  const box = $('eventList');
+  box.innerHTML = state.events.map((e, i) =>
+    '<div class="item-row"><div class="grow"><b>' + esc(e.title) + '</b><small>' + esc(e.date) + ' · ' + esc(e.time) + ' · ' + esc(e.place) + ' · ' + esc(e.type) + '</small></div>' +
+    '<button class="btn-soft btn-sm" data-event-edit="' + i + '">تعديل</button>' +
+    '<button class="btn-danger" data-event-del="' + i + '">حذف</button></div>'
+  ).join('') || '<p class="hint">لا توجد فعاليات.</p>';
+  document.querySelectorAll('[data-event-edit]').forEach(b => b.onclick = () => editEvent(+b.dataset.eventEdit));
+  document.querySelectorAll('[data-event-del]').forEach(b => b.onclick = async () => {
+    if (!confirm('حذف الفعالية؟')) return;
+    state.events.splice(+b.dataset.eventDel, 1); await saveJSON('events.json', state.events); renderEvents();
+  });
+}
+function editEvent(i) {
+  state.editingEvent = i; const e = state.events[i];
+  $('eTitle').value = e.title; $('eDate').value = e.date; $('eTime').value = e.time || '';
+  $('ePlace').value = e.place || ''; $('eType').value = e.type || ''; $('eDesc').value = e.desc || '';
+  $('eventFormBox').classList.remove('hidden');
+}
+$('eventAdd').onclick = () => {
+  state.editingEvent = null;
+  $('eTitle').value = ''; $('eDate').value = todayISO(); $('eTime').value = ''; $('ePlace').value = ''; $('eType').value = 'فعالية'; $('eDesc').value = '';
+  $('eventFormBox').classList.remove('hidden');
+};
+$('eventCancel').onclick = () => $('eventFormBox').classList.add('hidden');
+$('eventReload').onclick = async () => { state.events = await getJSON('events.json'); renderEvents(); };
+$('eventSave').onclick = async () => {
+  const item = { id: (state.editingEvent != null ? state.events[state.editingEvent].id : 'ev-' + Date.now()), title: $('eTitle').value.trim(), date: $('eDate').value, time: $('eTime').value.trim(), place: $('ePlace').value.trim(), type: $('eType').value.trim(), desc: $('eDesc').value.trim() };
+  if (!item.title) { alert('العنوان مطلوب'); return; }
+  try {
+    if (state.editingEvent != null) state.events[state.editingEvent] = item; else state.events.push(item);
+    await saveJSON('events.json', state.events);
+    $('eventFormBox').classList.add('hidden'); renderEvents();
+  } catch (e) { alert('فشل الحفظ: ' + e.message); }
+};
+
+/* ---------------- Members ---------------- */
+function renderMembers() {
+  const box = $('memberList');
+  box.innerHTML = state.members.map((m, i) =>
+    '<div class="item-row"><div class="grow"><b>' + esc(m.name) + '</b><small>' + esc(m.role) + (m.interests && m.interests.length ? ' · ' + esc(m.interests.join('، ')) : '') + '</small></div>' +
+    '<button class="btn-soft btn-sm" data-member-edit="' + i + '">تعديل</button>' +
+    '<button class="btn-danger" data-member-del="' + i + '">حذف</button></div>'
+  ).join('') || '<p class="hint">لا يوجد أعضاء.</p>';
+  document.querySelectorAll('[data-member-edit]').forEach(b => b.onclick = () => editMember(+b.dataset.memberEdit));
+  document.querySelectorAll('[data-member-del]').forEach(b => b.onclick = async () => {
+    if (!confirm('حذف العضو؟')) return;
+    state.members.splice(+b.dataset.memberDel, 1); await saveJSON('members.json', state.members); renderMembers();
+  });
+}
+function editMember(i) {
+  state.editingMember = i; const m = state.members[i];
+  $('mName').value = m.name; $('mRole').value = m.role || ''; $('mInterests').value = (m.interests || []).join('، ');
+  $('mContact').value = m.contact || '';
+  $('memberFormBox').classList.remove('hidden');
+}
+$('memberAdd').onclick = () => {
+  state.editingMember = null;
+  $('mName').value = ''; $('mRole').value = 'عضو'; $('mInterests').value = ''; $('mContact').value = '';
+  $('memberFormBox').classList.remove('hidden');
+};
+$('memberCancel').onclick = () => $('memberFormBox').classList.add('hidden');
+$('memberReload').onclick = async () => { state.members = await getJSON('members.json'); renderMembers(); };
+$('memberSave').onclick = async () => {
+  const item = {
+    name: $('mName').value.trim(), role: $('mRole').value.trim(),
+    interests: $('mInterests').value.split(/[،,]/).map(s => s.trim()).filter(Boolean),
+    joined: (state.editingMember != null && state.members[state.editingMember].joined) || '2024',
+    contact: $('mContact').value.trim()
+  };
+  if (!item.name) { alert('الاسم مطلوب'); return; }
+  try {
+    if (state.editingMember != null) state.members[state.editingMember] = item; else state.members.push(item);
+    await saveJSON('members.json', state.members);
+    $('memberFormBox').classList.add('hidden'); renderMembers();
+  } catch (e) { alert('فشل الحفظ: ' + e.message); }
+};
+
+/* ---------------- Raw JSON ---------------- */
+$('rawLoad').onclick = async () => {
+  try {
+    const d = await getJSON($('rawFile').value);
+    $('rawText').value = JSON.stringify(d, null, 2);
+  } catch (e) { alert('تعذّر التحميل: ' + e.message); }
+};
+$('rawSave').onclick = async () => {
+  let parsed;
+  try { parsed = JSON.parse($('rawText').value); } catch (e) { alert('JSON غير صالح: ' + e.message); return; }
+  try {
+    await saveJSON($('rawFile').value, parsed);
+    await loadAllData();
+  } catch (e) { alert('فشل الحفظ: ' + e.message); }
+};
+
+/* ---------------- Tabs & boot ---------------- */
+document.querySelectorAll('.admin-tab').forEach(tab => {
+  tab.onclick = () => {
+    document.querySelectorAll('.admin-tab').forEach(t => t.classList.remove('active'));
+    document.querySelectorAll('.admin-panel').forEach(p => p.classList.remove('active'));
+    tab.classList.add('active');
+    $('panel-' + tab.dataset.tab).classList.add('active');
+  };
+});
+$('btnConnect').onclick = () => connect(false);
+$('btnPublish').onclick = publish;
+$('btnRepublish').onclick = publish;
+
+loadCfg();
+if (state.cfg && state.cfg.token) {
+  connect(true);
+} else {
+  setStatus('غير متصل — أكمل الخطوة 1');
+}
+</script>
+</body>
+</html>
