@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex, nofollow">
+<title>بنك الأسئلة والامتحانات | هندسة كيميائية — الدفعة 45</title>
+<meta name="description" content="أرشيف امتحانات السنوات السابقة والأسئلة المحلولة لمقررات الدفعة 45 — كلية الهندسة والتكنولوجيا، جامعة الجزيرة.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Amiri:wght@400;700&family=Cairo:wght@300;400;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="assets/css/style.css">
+<link rel="icon" href="assets/img/favicon.svg" type="image/svg+xml">
+</head>
+<body data-page="exams">
+<div id="site-topbar"></div>
+<div id="site-header"></div>
+
+<main>
+  <section class="page-hero">
+    <div class="container page-hero-inner">
+      <div class="breadcrumb"><a href="index.html">الرئيسية</a><span class="sep">/</span><span>بنك الأسئلة</span></div>
+      <h1 class="page-title">بنك الأسئلة والامتحانات</h1>
+      <p class="page-sub">أرشيف امتحانات السنوات السابقة والأسئلة المحلولة لكل مقرر — أفضل طريقة للاستعداد هي حل امتحان قديمًا.</p>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="container">
+      <div class="notice reveal" style="margin-bottom:1.8rem">
+        <span>📌</span>
+        <div>
+          <b>ملاحظة</b>
+          الملفات المرتبطة حاليًا هي نماذج تجريبية للتوضيح. أضف الملفات الحقيقية عبر <code>data/exams.json</code> (حقل <code>url</code>)، وستظهر هنا مباشرة.
+        </div>
+      </div>
+
+      <div class="toolbar">
+        <div class="search-box">
+          <span class="ico">🔍</span>
+          <input class="search-input" id="exam-search" type="text" placeholder="ابحث عن مقرر أو ملف…" aria-label="بحث في بنك الأسئلة">
+        </div>
+        <div class="text-muted" style="font-size:.82rem" id="exam-count">جارٍ التحميل…</div>
+      </div>
+
+      <div id="exam-list">
+        <div class="loading">جارٍ تحميل بنك الأسئلة…</div>
+      </div>
+    </div>
+  </section>
+</main>
+
+<div id="site-footer"></div>
+<script src="assets/js/app.js"></script>
+<script>
+B45.ready(async function () {
+  let data;
+  try {
+    data = await B45.loadJSON('data/exams.json');
+  } catch (err) {
+    document.getElementById('exam-list').innerHTML = '<div class="empty">تعذّر التحميل: ' + B45.esc(err.message) + '</div>';
+    return;
+  }
+  const courses = data.courses || [];
+  const list = document.getElementById('exam-list');
+  const countEl = document.getElementById('exam-count');
+
+  function render(filter) {
+    const q = (filter || '').toLowerCase();
+    let shown = 0;
+    const html = courses.map(function (c) {
+      const items = (c.items || []).filter(function (it) {
+        if (!q) return true;
+        return (c.name + ' ' + it.title + ' ' + it.year + ' ' + it.type).toLowerCase().indexOf(q) !== -1;
+      });
+      if (!items.length) return '';
+      shown += items.length;
+      return '<div class="exam-course open reveal" data-course="' + B45.esc(c.name) + '">' +
+        '<div class="exam-head"><h3>' + (c.icon ? c.icon + ' ' : '') + B45.esc(c.name) + '</h3>' +
+        '<span class="exam-count">' + items.length + ' ملف — اضغط للإخفاء/الإظهار</span></div>' +
+        '<div class="exam-body">' + items.map(function (it) {
+          return '<div class="file-row"><div class="file-ico">📝</div>' +
+            '<div class="file-name"><b>' + B45.esc(it.title) + '</b>' +
+            '<span>' + B45.esc(it.type) + ' · ' + B45.esc(it.year) + '</span></div>' +
+            (it.url ? '<a class="file-dl" href="' + B45.esc(it.url) + '" target="_blank" rel="noopener">تحميل ↓</a>' : '<span class="badge badge--muted">قريبًا</span>') +
+            '</div>';
+        }).join('') + '</div></div>';
+    }).join('');
+    list.innerHTML = html || '<div class="empty">لا توجد نتائج مطابقة.</div>';
+    countEl.textContent = shown + ' ملف في ' + courses.length + ' مقرر';
+    list.querySelectorAll('.exam-head').forEach(function (h) {
+      h.addEventListener('click', function () { h.closest('.exam-course').classList.toggle('open'); });
+    });
+  }
+
+  render('');
+  document.getElementById('exam-search').addEventListener('input', function (e) { render(e.target.value.trim()); });
+});
+</script>
+</body>
+</html>
