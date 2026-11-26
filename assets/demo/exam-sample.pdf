@@ -1,0 +1,52 @@
+%PDF-1.4
+1 0 obj
+<< /Type /Catalog /Pages 2 0 R >>
+endobj
+2 0 obj
+<< /Type /Pages /Kids [3 0 R] /Count 1 >>
+endobj
+3 0 obj
+<< /Type /Page /Parent 2 0 R /MediaBox [0 0 595 842] /Resources << /Font << /F1 5 0 R /F2 6 0 R >> >> /Contents 4 0 R >>
+endobj
+4 0 obj
+<< /Length 972 >>
+stream
+BT /F1 22 Tf 55 780 Td (Sample Final Exam) Tj ET
+BT /F2 12 Tf 55 750 Td (Chemical Engineering - Batch 45 - University of Gezira) Tj ET
+0.79 0.63 0.15 RG 2 w 55 716 m 540 716 l S
+BT /F2 12 Tf 55 686 Td (Time: 2 hours        Total marks: 60) Tj ET
+BT /F2 12 Tf 55 664 Td () Tj ET
+BT /F2 12 Tf 55 642 Td (Question 1 \(10 marks\)) Tj ET
+BT /F2 12 Tf 55 620 Td (Define the following: system, state function, enthalpy.) Tj ET
+BT /F2 12 Tf 55 598 Td () Tj ET
+BT /F2 12 Tf 55 576 Td (Question 2 \(15 marks\)) Tj ET
+BT /F2 12 Tf 55 554 Td (A closed system undergoes a process ...) Tj ET
+BT /F2 12 Tf 55 532 Td () Tj ET
+BT /F2 12 Tf 55 510 Td (Question 3 \(15 marks\)) Tj ET
+BT /F2 12 Tf 55 488 Td (Calculate the work done by an ideal gas ...) Tj ET
+BT /F2 12 Tf 55 466 Td () Tj ET
+BT /F2 12 Tf 55 444 Td (Question 4 \(20 marks\)) Tj ET
+BT /F2 12 Tf 55 422 Td (Discuss the second law of thermodynamics ...) Tj ET
+BT /F2 9 Tf 55 60 Td (Demo file - replace with real past exams) Tj ET
+endstream
+endobj
+5 0 obj
+<< /Type /Font /Subtype /Type1 /BaseFont /Helvetica-Bold >>
+endobj
+6 0 obj
+<< /Type /Font /Subtype /Type1 /BaseFont /Helvetica >>
+endobj
+xref
+0 7
+0000000000 65535 f 
+0000000009 00000 n 
+0000000058 00000 n 
+0000000115 00000 n 
+0000000251 00000 n 
+0000001274 00000 n 
+0000001349 00000 n 
+trailer
+<< /Size 7 /Root 1 0 R >>
+startxref
+1419
+%%EOF
