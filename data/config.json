@@ -1,0 +1,29 @@
+{
+  "siteNameAr": "هندسة كيميائية — الدفعة 45",
+  "siteNameEn": "Chemical Engineering · Batch 45",
+  "universityAr": "جامعة الجزيرة",
+  "universityEn": "University of Gezira",
+  "universityUrl": "https://uofg.edu.sd",
+  "portalUrl": "https://portal.uofg.edu.sd",
+  "facultyAr": "كلية الهندسة والتكنولوجيا",
+  "batchNo": "45",
+  "termAr": "الفصل الدراسي الخامس 2026/2027",
+  "mottoAr": "الإبداع والتميز العلمي",
+  "mottoEn": "Creativity & Scientific Excellence",
+  "announcementBar": "نسخة تجريبية أولى من بوابة الدفعة 45 — نرحّب بملاحظاتكم لإثراء المحتوى قبل النشر الرسمي.",
+  "footerAbout": "البوابة الإلكترونية لطلاب الدفعة 45 بقسم الهندسة الكيميائية — كلية الهندسة والتكنولوجيا، جامعة الجزيرة (ود مدني، السودان). مساحة أكاديمية تجمع المحاضرات والملفات والجدول الدراسي والأنشطة، وتصل الزملاء ببعضهم.",
+  "footerNote": "صُنع بشغف لخدمة زملاء الدفعة 45",
+  "auth": {
+    "enabled": true,
+    "password": "gezira45"
+  },
+  "contact": {
+    "email": "batch45@gezira.example",
+    "telegram": "https://t.me/",
+    "whatsapp": "https://chat.whatsapp.com/"
+  },
+  "social": [
+    { "label": "تليجرام", "url": "https://t.me/" },
+    { "label": "واتساب", "url": "https://chat.whatsapp.com/" }
+  ]
+}
