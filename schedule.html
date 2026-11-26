@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex, nofollow">
+<title>الجدول الدراسي والامتحانات | هندسة كيميائية — الدفعة 45</title>
+<meta name="description" content="الجدول الأسبوعي للمحاضرات ومواعيد الامتحانات النهائية — الدفعة 45، كلية الهندسة والتكنولوجيا، جامعة الجزيرة.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Amiri:wght@400;700&family=Cairo:wght@300;400;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="assets/css/style.css">
+<link rel="icon" href="assets/img/favicon.svg" type="image/svg+xml">
+</head>
+<body data-page="schedule">
+<div id="site-topbar"></div>
+<div id="site-header"></div>
+
+<main>
+  <section class="page-hero">
+    <div class="container page-hero-inner">
+      <div class="breadcrumb"><a href="index.html">الرئيسية</a><span class="sep">/</span><span>الجدول الدراسي</span></div>
+      <h1 class="page-title">الجدول الدراسي والامتحانات</h1>
+      <p class="page-sub">جدول المحاضرات الأسبوعي ومواعيد الامتحانات النهائية المعتمدة للفصل الخامس 2026/2027.</p>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="container">
+      <div id="exam-banner"></div>
+
+      <div class="tabs" role="tablist">
+        <button class="tab active" data-tab="weekly" role="tab">🗓️ الجدول الأسبوعي</button>
+        <button class="tab" data-tab="exams" role="tab">📝 جدول الامتحانات</button>
+      </div>
+
+      <div class="tab-panel active" id="panel-weekly">
+        <div class="table-wrap" id="weekly-table">
+          <div class="loading">جارٍ تحميل الجدول…</div>
+        </div>
+        <p class="table-note">⚠️ الجدول قابل للتغيير من إدارة الكلية — راجعوا أي تحديث في صفحة الأخبار. آخر تحديث: <span id="schedule-update">—</span></p>
+      </div>
+
+      <div class="tab-panel" id="panel-exams">
+        <div class="table-wrap" id="exams-table">
+          <div class="loading">جارٍ تحميل جدول الامتحانات…</div>
+        </div>
+        <p class="table-note">📌 الحضور قبل الامتحان بنصف ساعة مع البطاقة الجامعية. الغياب بعذر مقبول يتطلب إخطار الشؤون الأكاديمية قبل 48 ساعة.</p>
+      </div>
+    </div>
+  </section>
+</main>
+
+<div id="site-footer"></div>
+<script src="assets/js/app.js"></script>
+<script>
+B45.ready(async function () {
+  let data;
+  try {
+    data = await B45.loadJSON('data/schedule.json');
+  } catch (err) {
+    document.getElementById('weekly-table').innerHTML = '<div class="empty">تعذّر تحميل الجدول: ' + B45.esc(err.message) + '</div>';
+    return;
+  }
+
+  const today = new Date(); today.setHours(0, 0, 0, 0);
+  const DAYS_FULL = ['الأحد', 'الاثنين', 'الثلاثاء', 'الأربعاء', 'الخميس', 'الجمعة', 'السبت'];
+
+  /* ---------- weekly grid ---------- */
+  const days = data.days || [];
+  const periods = data.periods || [];
+  let html = '<table class="data-table"><thead><tr><th style="width:130px">الوقت</th>';
+  days.forEach(function (d) { html += '<th>' + B45.esc(d) + '</th>'; });
+  html += '</tr></thead><tbody>';
+  periods.forEach(function (p, pi) {
+    html += '<tr><td class="subject" style="white-space:nowrap">⏰ ' + B45.esc(p) + '</td>';
+    days.forEach(function (d, di) {
+      const cell = (data.entries || []).filter(function (e) { return e.day === di && e.period === pi; });
+      html += '<td class="schedule-cell">' + (cell.length
+        ? cell.map(function (e, i) {
+            return '<span class="schedule-slot' + (i % 2 ? ' alt' : '') + '">' + B45.esc(e.course) +
+              '<br><small style="font-weight:400;opacity:.8">' + B45.esc(e.room) + ' — ' + B45.esc(e.instructor) + '</small></span>';
+          }).join('')
+        : '<span style="color:#B9C0CB">—</span>') + '</td>';
+    });
+    html += '</tr>';
+  });
+  html += '</tbody></table>';
+  document.getElementById('weekly-table').innerHTML = html;
+  document.getElementById('schedule-update').textContent = B45.fmtDate(new Date().toISOString().slice(0, 10));
+
+  /* ---------- exams table ---------- */
+  const exams = (data.exams || []).slice().sort(function (a, b) { return new Date(a.date) - new Date(b.date); });
+  if (exams.length) {
+    let t = '<table class="data-table"><thead><tr><th>المقرر</th><th>اليوم</th><th>التاريخ</th><th>الوقت</th><th>القاعة</th><th>النوع</th><th>المتبقي</th></tr></thead><tbody>';
+    exams.forEach(function (ex) {
+      const d = new Date(ex.date);
+      const diff = Math.round((d - today) / 86400000);
+      const remain = diff > 0 ? '<span class="badge badge--navy">' + diff + ' يوم</span>'
+        : diff === 0 ? '<span class="badge badge--danger">اليوم</span>'
+        : '<span class="badge badge--muted">انتهى</span>';
+      t += '<tr><td class="subject">' + B45.esc(ex.course) + '</td>' +
+        '<td>' + DAYS_FULL[d.getDay()] + '</td>' +
+        '<td>' + B45.fmtDate(ex.date) + '</td>' +
+        '<td>' + B45.esc(ex.time) + '</td>' +
+        '<td>' + B45.esc(ex.place) + '</td>' +
+        '<td><span class="badge ' + (ex.type === 'عملي' ? 'badge--ok' : 'badge--gold') + '">' + B45.esc(ex.type) + '</span></td>' +
+        '<td>' + remain + '</td></tr>';
+    });
+    t += '</tbody></table>';
+    document.getElementById('exams-table').innerHTML = t;
+  } else {
+    document.getElementById('exams-table').innerHTML = '<div class="empty">لم يُعلن جدول الامتحانات بعد.</div>';
+  }
+
+  /* ---------- nearest exam banner ---------- */
+  const next = exams.filter(function (e) { return new Date(e.date) >= today; })[0];
+  if (next) {
+    const diff = Math.round((new Date(next.date) - today) / 86400000);
+    document.getElementById('exam-banner').innerHTML =
+      '<div class="cta-band reveal" style="padding:1.2rem 1.6rem;margin-bottom:1.8rem">' +
+      '<div><h2 style="font-size:1.2rem;margin:0 0 .15rem">⏳ أقرب امتحان: ' + B45.esc(next.course) + '</h2>' +
+      '<p style="margin:0">' + B45.fmtDate(next.date) + ' — الساعة ' + B45.esc(next.time) + ' — ' + B45.esc(next.place) + '</p></div>' +
+      '<span class="badge badge--gold" style="font-size:.95rem;padding:.5em 1em">بعد ' + diff + ' يوم</span></div>';
+    document.querySelectorAll('.reveal').forEach(function (el) { el.classList.add('visible'); });
+  }
+
+  /* ---------- tabs ---------- */
+  document.querySelectorAll('.tab').forEach(function (tab) {
+    tab.addEventListener('click', function () {
+      document.querySelectorAll('.tab').forEach(function (t) { t.classList.remove('active'); });
+      document.querySelectorAll('.tab-panel').forEach(function (p) { p.classList.remove('active'); });
+      tab.classList.add('active');
+      document.getElementById('panel-' + tab.getAttribute('data-tab')).classList.add('active');
+    });
+  });
+});
+</script>
+</body>
+</html>
