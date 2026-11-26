@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex, nofollow">
+<title>المكتبة الرقمية | هندسة كيميائية — الدفعة 45</title>
+<meta name="description" content="مكتبة الدفعة 45: محاضرات، ملازم، مسائل محلولة، وملفات كل مقررات الهندسة الكيميائية.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Amiri:wght@400;700&family=Cairo:wght@300;400;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="assets/css/style.css">
+<link rel="icon" href="assets/img/favicon.svg" type="image/svg+xml">
+</head>
+<body data-page="library">
+<div id="site-topbar"></div>
+<div id="site-header"></div>
+
+<main>
+  <section class="page-hero">
+    <div class="container page-hero-inner">
+      <div class="breadcrumb"><a href="index.html">الرئيسية</a><span class="sep">/</span><span>المكتبة</span></div>
+      <h1 class="page-title">المكتبة الرقمية</h1>
+      <p class="page-sub">مذكرات المحاضرات، المسائل المحلولة، المراجع، وملفات المقررات — مرتبة حسب المادة، مع روابط تحميل مباشرة.</p>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="container">
+      <div class="notice notice--info reveal" style="margin-bottom:1.8rem">
+        <span>💡</span>
+        <div>
+          <b>كيف تضيف ملفًا؟</b>
+          افتح الملف <code>data/courses.json</code> وأضف عنصرًا جديدًا داخل <code>files</code> للمقرر، وضع رابط الملف (Google Drive أو أي رابط مباشر) في الحقل <code>url</code>. الملفات التي لا تحتوي رابطًا تظهر بعلامة «قريبًا».
+        </div>
+      </div>
+
+      <div class="toolbar">
+        <div class="search-box">
+          <span class="ico">🔍</span>
+          <input class="search-input" id="lib-search" type="text" placeholder="ابحث عن مقرر أو ملف…" aria-label="بحث في المكتبة">
+        </div>
+        <div class="text-muted" style="font-size:.82rem" id="lib-count">جارٍ التحميل…</div>
+      </div>
+
+      <div class="course-grid" id="course-grid">
+        <div class="loading">جارٍ تحميل المكتبة…</div>
+      </div>
+    </div>
+  </section>
+</main>
+
+<div id="site-footer"></div>
+<script src="assets/js/app.js"></script>
+<script>
+B45.ready(async function () {
+  let courses = [];
+  try {
+    courses = await B45.loadJSON('data/courses.json');
+  } catch (err) {
+    document.getElementById('course-grid').innerHTML = '<div class="empty">تعذّر تحميل المكتبة: ' + B45.esc(err.message) + '</div>';
+    return;
+  }
+
+  const grid = document.getElementById('course-grid');
+  const countEl = document.getElementById('lib-count');
+
+  function cardHtml(c) {
+    const files = (c.files || []);
+    return '<article class="card course-card reveal open" data-id="' + B45.esc(c.id) + '">' +
+      '<div class="course-head">' +
+      '<div class="course-badge">' + B45.esc(c.code ? c.code.split(' ')[0] : 'CHE') + '</div>' +
+      '<div class="course-info"><h3>' + (c.icon ? c.icon + ' ' : '') + B45.esc(c.name) + '</h3>' +
+      '<div class="meta"><span>👨‍🏫 ' + B45.esc(c.instructor) + '</span><span>⏱️ ' + B45.esc(c.credits) + ' ساعات</span>' +
+      '<span>📄 ' + files.length + ' ملف</span><span class="badge badge--navy">' + B45.esc(c.code) + '</span></div>' +
+      '<p class="card-text" style="margin:.5rem 0 0">' + B45.esc(c.description) + '</p></div>' +
+      '<span class="card-link" style="align-self:center;white-space:nowrap">الملفات ▾</span>' +
+      '</div>' +
+      '<div class="course-files">' +
+      (files.length ? files.map(B45.fileRow).join('') : '<div class="empty">لم تُضف ملفات لهذا المقرر بعد.</div>') +
+      '</div></article>';
+  }
+
+  function render(list) {
+    grid.innerHTML = list.map(cardHtml).join('');
+    countEl.textContent = list.length + ' مقرر · ' + list.reduce(function (a, c) { return a + (c.files || []).length; }, 0) + ' ملف';
+    grid.querySelectorAll('.course-card').forEach(function (card) {
+      card.querySelector('.course-head').addEventListener('click', function () {
+        card.classList.toggle('open');
+      });
+    });
+  }
+
+  render(courses);
+
+  document.getElementById('lib-search').addEventListener('input', function (e) {
+    const q = e.target.value.trim().toLowerCase();
+    if (!q) { render(courses); return; }
+    const filtered = courses.filter(function (c) {
+      const files = (c.files || []).map(function (f) { return f.title; }).join(' ');
+      return [c.name, c.code, c.instructor, c.description, files].join(' ').toLowerCase().indexOf(q) !== -1;
+    });
+    render(filtered);
+    if (!filtered.length) grid.innerHTML = '<div class="empty">لا توجد نتائج مطابقة.</div>';
+  });
+});
+</script>
+</body>
+</html>
