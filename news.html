@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex, nofollow">
+<title>الأخبار والإعلانات | هندسة كيميائية — الدفعة 45</title>
+<meta name="description" content="آخر أخبار وإعلانات الدفعة 45 — كلية الهندسة والتكنولوجيا، جامعة الجزيرة.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Amiri:wght@400;700&family=Cairo:wght@300;400;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="assets/css/style.css">
+<link rel="icon" href="assets/img/favicon.svg" type="image/svg+xml">
+</head>
+<body data-page="news">
+<div id="site-topbar"></div>
+<div id="site-header"></div>
+
+<main>
+  <section class="page-hero">
+    <div class="container page-hero-inner">
+      <div class="breadcrumb"><a href="index.html">الرئيسية</a><span class="sep">/</span><span>الأخبار</span></div>
+      <h1 class="page-title">الأخبار والإعلانات</h1>
+      <p class="page-sub">كل ما يهم الدفعة: قرارات أكاديمية، مواعيد، فعاليات، وإعلانات هامة — مرتبة حسب الأولوية والتاريخ.</p>
+    </div>
+  </section>
+
+  <div class="container">
+    <div class="announce" style="border-radius:12px;margin-top:1.6rem;overflow:hidden">
+      <div class="announce-inner" style="padding-inline:1rem">
+        <span class="tag">تحديث</span>
+        <span id="news-last-update">جارٍ التحميل…</span>
+      </div>
+    </div>
+  </div>
+
+  <section class="section">
+    <div class="container">
+      <div class="toolbar">
+        <div class="chips" id="news-filters">
+          <button class="chip active" data-cat="all">الكل</button>
+          <button class="chip" data-cat="إعلان">إعلانات</button>
+          <button class="chip" data-cat="أكاديمي">أكاديمي</button>
+          <button class="chip" data-cat="فعالية">فعاليات</button>
+          <button class="chip" data-cat="هام">هام</button>
+        </div>
+        <div class="search-box">
+          <span class="ico">🔍</span>
+          <input class="search-input" id="news-search" type="text" placeholder="ابحث في الأخبار…" aria-label="بحث في الأخبار">
+        </div>
+      </div>
+      <div class="news-list" id="news-list">
+        <div class="loading">جارٍ تحميل الأخبار…</div>
+      </div>
+    </div>
+  </section>
+</main>
+
+<div id="site-footer"></div>
+<script src="assets/js/app.js"></script>
+<script>
+B45.ready(async function () {
+  let all = [];
+  let cat = 'all';
+  let term = '';
+  try {
+    all = await B45.loadJSON('data/news.json');
+    all = all.slice().sort(function (a, b) {
+      if (!!b.pinned !== !!a.pinned) return b.pinned ? 1 : -1;
+      return new Date(b.date) - new Date(a.date);
+    });
+    const latest = all.slice().sort(function (a, b) { return new Date(b.date) - new Date(a.date); })[0];
+    document.getElementById('news-last-update').textContent =
+      latest ? 'آخر تحديث: ' + B45.fmtDate(latest.date) + ' — ' + latest.title : 'لا توجد أخبار بعد.';
+    render(all);
+  } catch (err) {
+    document.getElementById('news-list').innerHTML = '<div class="empty">تعذّر تحميل الأخبار: ' + B45.esc(err.message) + '</div>';
+    return;
+  }
+
+  function render(list) {
+    const box = document.getElementById('news-list');
+    const filtered = list.filter(function (n) {
+      const okCat = cat === 'all' || n.category === cat;
+      const hay = (n.title + ' ' + n.excerpt + ' ' + (n.author || '')).toLowerCase();
+      const okTerm = !term || hay.indexOf(term.toLowerCase()) !== -1;
+      return okCat && okTerm;
+    });
+    if (!filtered.length) {
+      box.innerHTML = '<div class="empty" style="padding:2.5rem;text-align:center;background:#fff;border-radius:14px;border:1px dashed var(--line)">لا توجد أخبار مطابقة لبحثك.</div>';
+      return;
+    }
+    box.innerHTML = filtered.map(B45.newsCard).join('');
+    box.querySelectorAll('[data-news-id]').forEach(function (card) {
+      card.addEventListener('click', function () {
+        const item = all.find(function (n) { return n.id === card.getAttribute('data-news-id'); });
+        if (!item) return;
+        B45.openModal({
+          title: item.title,
+          meta: '<span class="badge ' + B45.badgeClass(item.category) + '">' + B45.esc(item.category) + '</span> · ' + B45.fmtDate(item.date) + ' · ' + B45.esc(item.author || ''),
+          html: item.body
+        });
+      });
+    });
+  }
+
+  document.getElementById('news-filters').addEventListener('click', function (e) {
+    const btn = e.target.closest('.chip');
+    if (!btn) return;
+    this.querySelectorAll('.chip').forEach(function (c) { c.classList.remove('active'); });
+    btn.classList.add('active');
+    cat = btn.getAttribute('data-cat');
+    render(all);
+  });
+
+  document.getElementById('news-search').addEventListener('input', function (e) {
+    term = e.target.value.trim();
+    render(all);
+  });
+});
+</script>
+</body>
+</html>
