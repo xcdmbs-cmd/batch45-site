@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex, nofollow">
+<title>دليل أعضاء الدفعة | هندسة كيميائية — الدفعة 45</title>
+<meta name="description" content="دليل أعضاء الدفعة 45 — قائمة الزملاء وأدوارهم واهتماماتهم.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Amiri:wght@400;700&family=Cairo:wght@300;400;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="assets/css/style.css">
+<link rel="icon" href="assets/img/favicon.svg" type="image/svg+xml">
+</head>
+<body data-page="members">
+<div id="site-topbar"></div>
+<div id="site-header"></div>
+
+<main>
+  <section class="page-hero">
+    <div class="container page-hero-inner">
+      <div class="breadcrumb"><a href="index.html">الرئيسية</a><span class="sep">/</span><span>الأعضاء</span></div>
+      <h1 class="page-title">دليل أعضاء الدفعة</h1>
+      <p class="page-sub">تعرّف على زملائك: الأدوار، الاهتمامات، ومن يمكنك التواصل معه في كل شأن.</p>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="container">
+      <div class="notice notice--info reveal" style="margin-bottom:1.8rem">
+        <span>🔐</span>
+        <div>
+          <b>خصوصية الأعضاء</b>
+          تظهر البيانات المدرجة فقط. لإضافة عضو أو تحديث بياناته، عدّل الملف <code>data/members.json</code> — ولا تضع بيانات تواصل إلا بموافقة العضو.
+        </div>
+      </div>
+
+      <div class="toolbar">
+        <div class="search-box">
+          <span class="ico">🔍</span>
+          <input class="search-input" id="member-search" type="text" placeholder="ابحث باسم العضو أو دوره…" aria-label="بحث في الأعضاء">
+        </div>
+        <div class="text-muted" style="font-size:.82rem" id="member-count">جارٍ التحميل…</div>
+      </div>
+
+      <div class="grid grid-4" id="member-grid">
+        <div class="loading">جارٍ تحميل الأعضاء…</div>
+      </div>
+    </div>
+  </section>
+</main>
+
+<div id="site-footer"></div>
+<script src="assets/js/app.js"></script>
+<script>
+B45.ready(async function () {
+  let members = [];
+  try { members = await B45.loadJSON('data/members.json'); }
+  catch (err) {
+    document.getElementById('member-grid').innerHTML = '<div class="empty">تعذّر التحميل: ' + B45.esc(err.message) + '</div>';
+    return;
+  }
+  const grid = document.getElementById('member-grid');
+  const countEl = document.getElementById('member-count');
+
+  function initials(name) {
+    const parts = String(name || '').trim().split(/\s+/);
+    return (parts[0] ? parts[0][0] : '') + (parts[1] ? parts[1][0] : '');
+  }
+
+  function render(list) {
+    grid.innerHTML = list.map(function (m) {
+      const interests = (m.interests || []).map(function (i) { return '<span>' + B45.esc(i) + '</span>'; }).join('');
+      const contact = m.contact
+        ? '<a class="member-contact" href="' + B45.esc(m.contact) + '" target="_blank" rel="noopener">تواصل ↗</a>'
+        : '<span class="member-contact" style="color:var(--muted);font-weight:400">عبر مجموعة الدفعة</span>';
+      return '<article class="card member-card reveal">' +
+        '<div class="member-avatar">' + B45.esc(initials(m.name)) + '</div>' +
+        '<h3 class="member-name">' + B45.esc(m.name) + '</h3>' +
+        '<div class="member-role">' + B45.esc(m.role) + '</div>' +
+        '<div class="member-interests">' + interests + '</div>' +
+        contact + '</article>';
+    }).join('');
+    countEl.textContent = list.length + ' عضو في الدليل';
+    document.querySelectorAll('.reveal').forEach(function (el) { el.classList.add('visible'); });
+  }
+
+  render(members);
+  document.getElementById('member-search').addEventListener('input', function (e) {
+    const q = e.target.value.trim().toLowerCase();
+    const filtered = members.filter(function (m) {
+      return [m.name, m.role, (m.interests || []).join(' ')].join(' ').toLowerCase().indexOf(q) !== -1;
+    });
+    render(filtered);
+    if (!filtered.length) grid.innerHTML = '<div class="empty">لا توجد نتائج مطابقة.</div>';
+  });
+});
+</script>
+</body>
+</html>
